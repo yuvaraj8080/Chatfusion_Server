@@ -26,12 +26,8 @@ class DeletedBy {
 }
 
 @index({ type: 1, isDeleted: 1, "participants.userId": 1 })
-@index({
-  "participants.userId": 1,
-  "deletedBy.userId": 1,
-  isDeleted: 1,
-  updatedAt: 1,
-})
+@index({ "participants.userId": 1, isDeleted: 1, updatedAt: 1 })
+@index({ "deletedBy.userId": 1, isDeleted: 1, updatedAt: 1 })
 export class Chat {
   @prop({ default: null })
   groupName!: string;
