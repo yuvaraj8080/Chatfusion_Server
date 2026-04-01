@@ -20,6 +20,7 @@ import NotificationRoutes from "./notification/notification.routes";
 import ReportRoutes from "./report/report.routes";
 import PlanRoutes from "./paymentModule/planModule/plan.routes";
 import SubscriptionRoutes from "./paymentModule/subscriptionModule/subscription.routes";
+import TransactionRoutes from "./paymentModule/transactionModule/transaction.routes";
 import { verifyAccessToken } from "./utils/generic/auth/auth.middleware";
 
 const mainRoutes = express.Router();
@@ -86,5 +87,8 @@ mainRoutes.use("/plan", PlanRoutes);
 
 // /api/subscription
 mainRoutes.use("/subscription", SubscriptionRoutes);
+
+// /api/transaction
+mainRoutes.use("/transaction", TransactionRoutes);
 
 export default mainRoutes;

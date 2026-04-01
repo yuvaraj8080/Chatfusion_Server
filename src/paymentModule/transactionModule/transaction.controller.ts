@@ -380,8 +380,8 @@ async function checkAndUpdatePhonePeTransaction(data: any) {
     data["state"] == "COMPLETED"
       ? TransactionStatus.SUCCESS
       : data["state"] == "FAILED"
-      ? TransactionStatus.FAILED
-      : TransactionStatus.PENDING;
+        ? TransactionStatus.FAILED
+        : TransactionStatus.PENDING;
   if (transaction.transactionStatus == TransactionStatus.SUCCESS) {
     transaction.paymentInstrument = data["paymentInstrument"]["type"];
     transaction.paidSuccesOn = new Date();
@@ -538,7 +538,7 @@ async function checkPhonePeTransactionStatus(merchantTransactionId: string) {
             .createHash("sha256")
             .update(
               `/pg/v1/status/${process.env.PHONEPE_MERCHANT_ID}/${merchantTransactionId}` +
-                process.env.SALT_KEY
+              process.env.SALT_KEY
             )
             .digest("hex") +
           "###" +
@@ -609,3 +609,62 @@ export const updateTransactionStatusToFailed = async (
     });
   }
 };
+
+export const approveTransaction = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { transactionId } = req.params;
+    const { isApproved } = req.body;
+
+    const updatedTransaction = await TransactionModel.findByIdAndUpdate(
+      transactionId,
+      { isApproved },
+      { new: true }
+    );
+
+    if (!updatedTransaction) {
+      return res.status(404).json({
+        message: "Transaction not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Transaction approval status updated",
+      success: true,
+      result: updatedTransaction,
+    });
+  } catch (error) {
+    console.error("Error updating transaction approval:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+export const getTransactions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const transactions = await TransactionModel.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      message: "Transactions fetched successfully",
+      success: true,
+      result: transactions,
+    });
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+

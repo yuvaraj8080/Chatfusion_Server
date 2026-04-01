@@ -124,6 +124,9 @@ export class Transaction {
 
   @prop()
   pixelId: string;
+
+  @prop({ default: false })
+  isApproved: boolean;
 }
 
 export const TransactionModel = getModelForClass(Transaction, {

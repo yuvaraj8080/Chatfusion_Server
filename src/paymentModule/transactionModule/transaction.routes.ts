@@ -5,9 +5,14 @@ import {
   updateTransactionStatusToFailed,
   createTransaction,
   updateTransactionStatus,
+  approveTransaction,
+  getTransactions,
 } from "./transaction.controller";
 
 const TransactionRouter = Router();
+
+// api/transaction/getTransactions
+TransactionRouter.get("/getTransactions", getTransactions);
 
 // api/transaction/createTransaction
 TransactionRouter.post("/createTransaction", createTransaction);
@@ -29,5 +34,8 @@ TransactionRouter.put(
   "/updateTransactionStatusToFailed/:transactionId",
   updateTransactionStatusToFailed
 );
+
+// api/transaction/approve/:transactionId
+TransactionRouter.post("/approve/:transactionId", approveTransaction);
 
 export default TransactionRouter;
